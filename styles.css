@@ -3482,6 +3482,7 @@ body {
 
   .professor-section {
     min-height: 280px;
+    padding-top: 30px;
   }
 
   .professor-section img {
