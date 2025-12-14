@@ -3168,7 +3168,7 @@ body {
 .minor-card {
   background: white;
   width: 100%;
-  height: -webkit-fill-available;
+  /* height: -webkit-fill-available; */
   padding: 16px;
   display: flex;
   flex-direction: column;
