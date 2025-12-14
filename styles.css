@@ -3224,12 +3224,12 @@ body {
     align-items: flex-start;
     gap: 16px;
     padding: 32px;
-    position: sticky;
+    /* position: sticky; */
     top: 80px;
     transition: transform 0.3s ease, opacity 0.3s ease;
   }
 
-  .minor-card:nth-child(1) {
+  /* .minor-card:nth-child(1) {
     top: 80px;
   }
 
@@ -3247,7 +3247,7 @@ body {
 
   .minor-card:nth-child(5) {
     top: 160px;
-  }
+  } */
 
   .minor-number {
     flex-shrink: 0;
