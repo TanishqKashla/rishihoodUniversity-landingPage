@@ -168,6 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     prevStartupArrow.addEventListener("click", () => {
+      if (isMobile()) return;
       const activeCard = document.querySelector(".startup-card.active");
       if (activeCard && activeCard.previousElementSibling && activeCard.previousElementSibling.classList.contains("startup-card")) {
         activeCard.classList.remove("active");
@@ -177,6 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     nextStartupArrow.addEventListener("click", () => {
+      if (isMobile()) return;
       const activeCard = document.querySelector(".startup-card.active");
       if (activeCard && activeCard.nextElementSibling && activeCard.nextElementSibling.classList.contains("startup-card")) {
         activeCard.classList.remove("active");

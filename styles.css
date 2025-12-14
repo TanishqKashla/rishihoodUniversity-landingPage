@@ -2982,6 +2982,10 @@ body {
     justify-content: flex-start;
   }
 
+  .startup-navigation {
+    display: none;
+  }
+
   /* Compact card sizing so cards are shorter and images are clearly visible */
   .startups-container>.startup-card {
     scroll-snap-align: center;
