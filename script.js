@@ -212,39 +212,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ".testimonials-container"
   );
 
-  // Testimonial cards functionality - Click to expand/collapse (disabled on mobile)
-  testimonialCards.forEach((card) => {
-    card.addEventListener("click", function () {
-      // On mobile clicking should do nothing
-      if (isMobile()) return;
 
-      // Remove active class from all cards
-      testimonialCards.forEach((c) => c.classList.remove("active"));
-
-      // Add active class to clicked card
-      this.classList.add("active");
-    });
-  });
-
-  // Ensure all testimonial cards are active on mobile
-  function updateTestimonialActiveState() {
-    if (isMobile()) {
-      testimonialCards.forEach((c) => c.classList.add("active"));
-    } else {
-      testimonialCards.forEach((c) => c.classList.remove("active"));
-      if (testimonialCards[0]) testimonialCards[0].classList.add("active");
-    }
-  }
-  updateTestimonialActiveState();
-
-  // Re-apply when resizing
-  window.addEventListener("resize", () => {
-    clearTimeout(window._testimonialResizeTimer);
-    window._testimonialResizeTimer = setTimeout(
-      updateTestimonialActiveState,
-      150
-    );
-  });
 
   // Testimonial navigation arrows - support desktop carousel and mobile scroll-snap
   const prevArrow = document.querySelector(".prev-arrow");
@@ -252,32 +220,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (prevArrow && nextArrow && testimonialsContainer) {
     let currentStartIndex = 0;
-    const visibleCards = 3; // desktop: show 3 cards at a time
+    let visibleCards = window.innerWidth < 1400 ? 2 : 3; // desktop: show 2 or 3 cards depending on width
     const totalCards = testimonialCards.length;
+    let autoSlideInterval;
 
     // Desktop carousel behavior (hide/show cards)
     function updateCarousel() {
-      // Hide all cards first
+      // Calculate which indices are visible
+      const visibleIndices = [];
+      for (let i = 0; i < visibleCards; i++) {
+        visibleIndices.push((currentStartIndex + i) % totalCards);
+      }
+
       testimonialCards.forEach((card, index) => {
-        if (
-          index >= currentStartIndex &&
-          index < currentStartIndex + visibleCards
-        ) {
+        if (visibleIndices.includes(index)) {
           card.style.display = "flex";
+          // Calculate order: relative to currentStartIndex
+          // We want the card at currentStartIndex to be 0, next 1, etc.
+          card.style.order = (index - currentStartIndex + totalCards) % totalCards;
         } else {
           card.style.display = "none";
         }
+        
+        // Remove active class
+        card.classList.remove("active");
       });
 
-      // Activate the first visible card
-      testimonialCards.forEach((c) => c.classList.remove("active"));
+      // Activate the current start card
       if (testimonialCards[currentStartIndex]) {
         testimonialCards[currentStartIndex].classList.add("active");
       }
 
-      // Update arrow states
-      prevArrow.disabled = currentStartIndex === 0;
-      nextArrow.disabled = currentStartIndex >= totalCards - visibleCards;
+      // Arrows always enabled
+      prevArrow.disabled = false;
+      nextArrow.disabled = false;
     }
 
     // Mobile scroll behavior
@@ -291,23 +267,35 @@ document.addEventListener("DOMContentLoaded", function () {
         testimonialsContainer.scrollWidth - 5;
     }
 
+    function startAutoSlide() {
+      clearInterval(autoSlideInterval);
+      autoSlideInterval = setInterval(() => {
+        desktopNext(true);
+      }, 3000);
+    }
+
+    function stopAutoSlide() {
+      clearInterval(autoSlideInterval);
+    }
+
     // Handlers for desktop
-    function desktopNext() {
-      if (currentStartIndex < totalCards - visibleCards) {
-        currentStartIndex++;
-        updateCarousel();
-        nextArrow.classList.add("active");
-        setTimeout(() => nextArrow.classList.remove("active"), 200);
+    function desktopNext(isAuto = false) {
+      currentStartIndex = (currentStartIndex + 1) % totalCards;
+      updateCarousel();
+      nextArrow.classList.add("active");
+      setTimeout(() => nextArrow.classList.remove("active"), 200);
+      
+      if (!isAuto) {
+        startAutoSlide(); // Reset timer on manual interaction
       }
     }
 
     function desktopPrev() {
-      if (currentStartIndex > 0) {
-        currentStartIndex--;
-        updateCarousel();
-        prevArrow.classList.add("active");
-        setTimeout(() => prevArrow.classList.remove("active"), 200);
-      }
+      currentStartIndex = (currentStartIndex - 1 + totalCards) % totalCards;
+      updateCarousel();
+      prevArrow.classList.add("active");
+      setTimeout(() => prevArrow.classList.remove("active"), 200);
+      startAutoSlide(); // Reset timer on manual interaction
     }
 
     // Handlers for mobile
@@ -341,16 +329,19 @@ document.addEventListener("DOMContentLoaded", function () {
       nextArrow.addEventListener("click", desktopNext);
       prevArrow.addEventListener("click", desktopPrev);
       updateCarousel();
+      startAutoSlide();
     }
 
     function enableMobileMode() {
+      stopAutoSlide();
       // detach desktop handlers
       nextArrow.removeEventListener("click", desktopNext);
       prevArrow.removeEventListener("click", desktopPrev);
 
-      // ensure all cards visible in row
+      // ensure all cards visible in row and active
       testimonialCards.forEach((card) => {
         card.style.display = "flex";
+        card.classList.add("active");
       });
 
       // Do NOT attach mobile click handlers for testimonials because
@@ -369,6 +360,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (window.innerWidth <= 768) {
         enableMobileMode();
       } else {
+        visibleCards = window.innerWidth < 1400 ? 2 : 3;
         enableDesktopMode();
       }
     }
@@ -1424,182 +1416,7 @@ window.addEventListener("resize", () => {
 });
 
 // Testimonial cards functionality - Click to expand/collapse
-const testimonialCards = document.querySelectorAll(".testimonial-card");
-const testimonialsContainer = document.querySelector(".testimonials-container");
 
-// Testimonial cards functionality - Click to expand/collapse (disabled on mobile)
-testimonialCards.forEach((card) => {
-  card.addEventListener("click", function () {
-    // On mobile clicking should do nothing
-    if (isMobile()) return;
-
-    // Remove active class from all cards
-    testimonialCards.forEach((c) => c.classList.remove("active"));
-
-    // Add active class to clicked card
-    this.classList.add("active");
-  });
-});
-
-// Ensure all testimonial cards are active on mobile
-function updateTestimonialActiveState() {
-  if (isMobile()) {
-    testimonialCards.forEach((c) => c.classList.add("active"));
-  } else {
-    testimonialCards.forEach((c) => c.classList.remove("active"));
-    if (testimonialCards[0]) testimonialCards[0].classList.add("active");
-  }
-}
-updateTestimonialActiveState();
-
-// Re-apply when resizing
-window.addEventListener("resize", () => {
-  clearTimeout(window._testimonialResizeTimer);
-  window._testimonialResizeTimer = setTimeout(
-    updateTestimonialActiveState,
-    150
-  );
-});
-
-// Testimonial navigation arrows - support desktop carousel and mobile scroll-snap
-const prevArrow = document.querySelector(".prev-arrow");
-const nextArrow = document.querySelector(".next-arrow");
-
-if (prevArrow && nextArrow && testimonialsContainer) {
-  let currentStartIndex = 0;
-  const visibleCards = 3; // desktop: show 3 cards at a time
-  const totalCards = testimonialCards.length;
-
-  // Desktop carousel behavior (hide/show cards)
-  function updateCarousel() {
-    // Hide all cards first
-    testimonialCards.forEach((card, index) => {
-      if (
-        index >= currentStartIndex &&
-        index < currentStartIndex + visibleCards
-      ) {
-        card.style.display = "flex";
-      } else {
-        card.style.display = "none";
-      }
-    });
-
-    // Activate the first visible card
-    testimonialCards.forEach((c) => c.classList.remove("active"));
-    if (testimonialCards[currentStartIndex]) {
-      testimonialCards[currentStartIndex].classList.add("active");
-    }
-
-    // Update arrow states
-    prevArrow.disabled = currentStartIndex === 0;
-    nextArrow.disabled = currentStartIndex >= totalCards - visibleCards;
-  }
-
-  // Mobile scroll behavior
-  const mobileScrollAmount = () =>
-    Math.round(testimonialsContainer.clientWidth * 0.82);
-
-  function updateMobileArrows() {
-    prevArrow.disabled = testimonialsContainer.scrollLeft <= 5;
-    nextArrow.disabled =
-      testimonialsContainer.scrollLeft + testimonialsContainer.clientWidth >=
-      testimonialsContainer.scrollWidth - 5;
-  }
-
-  // Handlers for desktop
-  function desktopNext() {
-    if (currentStartIndex < totalCards - visibleCards) {
-      currentStartIndex++;
-      updateCarousel();
-      nextArrow.classList.add("active");
-      setTimeout(() => nextArrow.classList.remove("active"), 200);
-    }
-  }
-
-  function desktopPrev() {
-    if (currentStartIndex > 0) {
-      currentStartIndex--;
-      updateCarousel();
-      prevArrow.classList.add("active");
-      setTimeout(() => prevArrow.classList.remove("active"), 200);
-    }
-  }
-
-  // Handlers for mobile
-  function mobileNext(e) {
-    e.preventDefault();
-    testimonialsContainer.scrollBy({
-      left: mobileScrollAmount(),
-      behavior: "smooth",
-    });
-  }
-
-  function mobilePrev(e) {
-    e.preventDefault();
-    testimonialsContainer.scrollBy({
-      left: -mobileScrollAmount(),
-      behavior: "smooth",
-    });
-  }
-
-  // Initialize according to viewport
-  function enableDesktopMode() {
-    // detach mobile handlers
-    testimonialsContainer.removeEventListener("scroll", updateMobileArrows);
-    nextArrow.removeEventListener("click", mobileNext);
-    prevArrow.removeEventListener("click", mobilePrev);
-
-    // show desktop carousel
-    testimonialCards.forEach((card) => (card.style.display = "flex"));
-    // reset index and set desktop behavior
-    currentStartIndex = 0;
-    nextArrow.addEventListener("click", desktopNext);
-    prevArrow.addEventListener("click", desktopPrev);
-    updateCarousel();
-  }
-
-  function enableMobileMode() {
-    // detach desktop handlers
-    nextArrow.removeEventListener("click", desktopNext);
-    prevArrow.removeEventListener("click", desktopPrev);
-
-    // ensure all cards visible in row
-    testimonialCards.forEach((card) => {
-      card.style.display = "flex";
-    });
-
-    // Do NOT attach mobile click handlers for testimonials because
-    // testimonial navigation buttons are hidden on mobile by CSS.
-    // Keep buttons disabled to avoid accidental focus/key activation.
-    try {
-      prevArrow.disabled = true;
-      nextArrow.disabled = true;
-    } catch (e) {
-      // ignore if buttons not present
-    }
-  }
-
-  // Decide initial mode and listen for resizes to swap
-  function initTestimonialMode() {
-    if (window.innerWidth <= 768) {
-      enableMobileMode();
-    } else {
-      enableDesktopMode();
-    }
-  }
-
-  // Re-init on resize (debounced)
-  let testimonialResizeTimer = null;
-  window.addEventListener("resize", function () {
-    clearTimeout(testimonialResizeTimer);
-    testimonialResizeTimer = setTimeout(function () {
-      initTestimonialMode();
-    }, 200);
-  });
-
-  // Initialize
-  initTestimonialMode();
-}
 
 // Faculty section functionality is handled above in the main FACULTY CAROUSEL section
 
