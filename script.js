@@ -125,18 +125,15 @@ document.addEventListener("DOMContentLoaded", function () {
   const startupCards = document.querySelectorAll(".startup-card");
   const isMobile = () => window.innerWidth <= 768;
 
-  startupCards.forEach((card) => {
-    card.addEventListener("click", function () {
-      // On mobile clicking should do nothing
-      if (isMobile()) return;
+  // Auto rotation logic
+  let startupInterval;
 
-      // Remove active class from all cards
-      startupCards.forEach((c) => c.classList.remove("active"));
-
-      // Add active class to clicked card
-      this.classList.add("active");
-    });
-  });
+  function stopStartupRotation() {
+    if (startupInterval) {
+      clearInterval(startupInterval);
+      startupInterval = null;
+    }
+  }
 
   // Startup Navigation Arrows
   const prevStartupArrow = document.querySelector(".prev-startup-arrow");
@@ -157,46 +154,97 @@ document.addEventListener("DOMContentLoaded", function () {
 
       prevStartupArrow.disabled = !hasPrev;
       nextStartupArrow.disabled = !hasNext;
-    }
+    };
 
     // Initial check
     updateStartupArrows();
+  }
 
-    // Update on click of cards too
-    startupCards.forEach(card => {
-      card.addEventListener('click', updateStartupArrows);
+  function startStartupRotation() {
+    stopStartupRotation();
+    if (isMobile()) return;
+
+    startupInterval = setInterval(() => {
+      const activeCard = document.querySelector(".startup-card.active");
+      if (!activeCard) return;
+
+      let nextCard = activeCard.nextElementSibling;
+      // Find next startup card
+      while (nextCard && !nextCard.classList.contains("startup-card")) {
+        nextCard = nextCard.nextElementSibling;
+      }
+
+      // Loop back to first if no next card
+      if (!nextCard) {
+        nextCard = startupCards[0];
+      }
+
+      if (nextCard) {
+        activeCard.classList.remove("active");
+        nextCard.classList.add("active");
+        updateStartupArrows();
+      }
+    }, 3000);
+  }
+
+  startupCards.forEach((card) => {
+    card.addEventListener("click", function () {
+      // On mobile clicking should do nothing
+      if (isMobile()) return;
+
+      stopStartupRotation();
+
+      // Remove active class from all cards
+      startupCards.forEach((c) => c.classList.remove("active"));
+
+      // Add active class to clicked card
+      this.classList.add("active");
+      updateStartupArrows();
+      
+      startStartupRotation();
     });
+  });
 
+  if (prevStartupArrow && nextStartupArrow) {
     prevStartupArrow.addEventListener("click", () => {
       if (isMobile()) return;
+      stopStartupRotation();
       const activeCard = document.querySelector(".startup-card.active");
       if (activeCard && activeCard.previousElementSibling && activeCard.previousElementSibling.classList.contains("startup-card")) {
         activeCard.classList.remove("active");
         activeCard.previousElementSibling.classList.add("active");
         updateStartupArrows();
       }
+      startStartupRotation();
     });
 
     nextStartupArrow.addEventListener("click", () => {
       if (isMobile()) return;
+      stopStartupRotation();
       const activeCard = document.querySelector(".startup-card.active");
       if (activeCard && activeCard.nextElementSibling && activeCard.nextElementSibling.classList.contains("startup-card")) {
         activeCard.classList.remove("active");
         activeCard.nextElementSibling.classList.add("active");
         updateStartupArrows();
       }
+      startStartupRotation();
     });
   }
 
   // Ensure all startup cards are active on mobile (so clicking doesn't change anything)
   function updateStartupActiveState() {
     if (isMobile()) {
+      stopStartupRotation();
       startupCards.forEach((c) => c.classList.add("active"));
     } else {
-      // On desktop, keep first card active by default
-      startupCards.forEach((c) => c.classList.remove("active"));
-      if (startupCards[0]) startupCards[0].classList.add("active");
+      // On desktop, keep first card active by default if multiple are active
+      const activeCards = document.querySelectorAll(".startup-card.active");
+      if (activeCards.length !== 1) {
+        startupCards.forEach((c) => c.classList.remove("active"));
+        if (startupCards[0]) startupCards[0].classList.add("active");
+      }
       updateStartupArrows();
+      startStartupRotation();
     }
   }
   updateStartupActiveState();
