@@ -2298,6 +2298,7 @@ body {
     display: flex;
     gap: 12px;
     overflow-x: auto;
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: x mandatory;
     padding-bottom: 8px;
@@ -2618,7 +2619,7 @@ body {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: x mandatory;
-
+    overflow-y: hidden;
     justify-content: flex-start;
     margin: 0;
   }
@@ -2715,7 +2716,7 @@ body {
 
   .testimonials-container {
     gap: 6px;
-    padding: 10px 0px;
+    padding: 10px 20px;
   }
 
   .testimonial-card {
@@ -2976,6 +2977,7 @@ body {
     display: flex;
     gap: 12px;
     overflow-x: auto;
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: x mandatory;
     padding: 0 12px;
