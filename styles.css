@@ -2740,7 +2740,7 @@ body {
     display: flex !important;
     cursor: grab;
     pointer-events: auto;
-    height: auto;
+    height: 180px;
     min-height: 180px;
   }
 
