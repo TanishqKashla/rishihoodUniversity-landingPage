@@ -3566,9 +3566,10 @@ body {
 
 @media (max-width: 768px) {
   .hero-section {
+    margin-top: 0px;
     background-image: url("https://rishihoodmarketingimg.s3.ap-south-1.amazonaws.com/BBB_Landing/assets/hero-phone.webp");
     /* background-size: contain; ensure full image is visible */
-    background-position: bottom center;
+    background-position: top center;
     background-repeat: no-repeat;
     /* background-size: auto; */
   }
@@ -3583,6 +3584,7 @@ body {
   .hero-content {
     justify-content: flex-start;
     font-size: 1rem !important;
+    padding-top:60px;
   }
 
   .hero-heading {
@@ -3629,8 +3631,8 @@ body {
   border: none;
   border-radius: 100px;
   height: 64px;
-  width: 190px;
-  font-size: 20px;
+  width: 170px;
+  font-size: 16px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
