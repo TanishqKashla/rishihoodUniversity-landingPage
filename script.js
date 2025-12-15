@@ -200,7 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Add active class to clicked card
       this.classList.add("active");
       updateStartupArrows();
-      
+
       startStartupRotation();
     });
   });
@@ -291,7 +291,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
           card.style.display = "none";
         }
-        
+
         // Remove active class
         card.classList.remove("active");
       });
@@ -334,7 +334,7 @@ document.addEventListener("DOMContentLoaded", function () {
       updateCarousel();
       nextArrow.classList.add("active");
       setTimeout(() => nextArrow.classList.remove("active"), 200);
-      
+
       if (!isAuto) {
         startAutoSlide(); // Reset timer on manual interaction
       }
