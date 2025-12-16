@@ -1715,3 +1715,100 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+
+// Auto-scroll animation for Video Cards on Mobile
+document.addEventListener("DOMContentLoaded", function () {
+  const container = document.querySelector(".video-cards-container");
+  if (!container) return;
+
+  let autoScrollTimer;
+  const animationDuration = 1000; // 1 second
+  const viewDuration = 2000; // Time to view the card before scrolling
+  const totalInterval = animationDuration + viewDuration;
+
+  function easeInOutQuad(t) {
+    return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+  }
+
+  function smoothScrollTo(element, target, duration) {
+    const start = element.scrollLeft;
+    const change = target - start;
+    const startTime = performance.now();
+    
+    // Disable snap temporarily to prevent fighting
+    const originalSnap = element.style.scrollSnapType;
+    element.style.scrollSnapType = 'none';
+
+    function animateScroll(currentTime) {
+      const elapsed = currentTime - startTime;
+      if (elapsed > duration) {
+        element.scrollLeft = target;
+        // Restore snap
+        element.style.scrollSnapType = originalSnap;
+        return;
+      }
+      
+      const progress = elapsed / duration;
+      const ease = easeInOutQuad(progress);
+      
+      element.scrollLeft = start + change * ease;
+      requestAnimationFrame(animateScroll);
+    }
+
+    requestAnimationFrame(animateScroll);
+  }
+
+  function startAutoScroll() {
+    // Only run on mobile and if there is overflow
+    if (window.innerWidth > 768 || container.scrollWidth <= container.clientWidth) {
+      return;
+    }
+
+    clearInterval(autoScrollTimer);
+    autoScrollTimer = setInterval(() => {
+      // Re-check conditions
+      if (window.innerWidth > 768) {
+        clearInterval(autoScrollTimer);
+        return;
+      }
+
+      const card = container.querySelector('a');
+      if (!card) return;
+      
+      // Calculate scroll amount (card width + gap)
+      // Gap is 12px from CSS
+      const itemWidth = card.offsetWidth + 12; 
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      
+      let nextScrollLeft = container.scrollLeft + itemWidth;
+
+      // Check if we need to loop back
+      // If we are close to the end (within half a card width), go back to 0
+      if (container.scrollLeft >= maxScroll - 10) {
+        smoothScrollTo(container, 0, animationDuration);
+      } else {
+        // Ensure we don't scroll past the max
+        if (nextScrollLeft > maxScroll) {
+           nextScrollLeft = maxScroll;
+        }
+        smoothScrollTo(container, nextScrollLeft, animationDuration);
+      }
+    }, totalInterval);
+  }
+
+  // Start logic
+  startAutoScroll();
+
+  // Handle resize
+  window.addEventListener('resize', () => {
+    clearInterval(autoScrollTimer);
+    startAutoScroll();
+  });
+
+  // Pause on user interaction
+  container.addEventListener('touchstart', () => clearInterval(autoScrollTimer));
+  container.addEventListener('touchend', () => {
+      // Restart after a delay to let user finish interacting
+      setTimeout(startAutoScroll, 2000);
+  });
+});

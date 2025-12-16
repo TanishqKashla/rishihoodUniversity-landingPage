@@ -234,7 +234,7 @@ body {
 /* ========== PROGRAM EXPERIENCE SECTION ========== */
 .program-experience-section {
   background: #f5f5f0;
-  padding: 4rem 1rem;
+  padding: 1rem 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -243,7 +243,7 @@ body {
 
 @media (min-width: 768px) {
   .program-experience-section {
-    padding: 3.5rem 2rem;
+    padding: 1rem 2rem;
   }
 }
 
@@ -251,6 +251,10 @@ body {
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
+}
+
+.program-experience-container .section-title {
+  margin: 2rem 0;
 }
 
 .program-experience-title {
@@ -275,10 +279,11 @@ body {
 .program-hours-wrapper {
   display: flex;
   justify-content: center;
-  margin-bottom: 2rem;
+  margin-bottom: 0.6rem;
   padding: 1rem 0;
   background-color: #ffffff;
   border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .program-hours-badge {
@@ -318,7 +323,7 @@ body {
 @media (min-width: 1024px) {
   .program-stats-grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+    gap: 1rem;
   }
 }
 
@@ -400,12 +405,12 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 4rem 1rem 2rem;
+  padding: 3rem 1rem 2rem;
 }
 
 @media (min-width: 640px) {
   .curriculum-section {
-    padding: 4rem 1rem 2rem;
+    padding: 1rem 1rem 2rem;
   }
 }
 
@@ -442,6 +447,7 @@ body {
 .curriculum-content-container {
   min-height: auto;
   padding-bottom: 1rem;
+  margin-top: -20px;
 }
 
 .curriculum-inner-wrapper {
@@ -817,9 +823,13 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 80vh;
-  padding: 44px 48px;
+  padding: 36px 48px;
   background-color: #faf8f4;
   overflow-x: hidden;
+}
+
+.faculty-section .section-title {
+  margin-bottom: 0px;
 }
 
 .faculty-title {
@@ -842,7 +852,7 @@ body {
 /* Tabs */
 .faculty-tabs {
   border-radius: 16px;
-  margin: 20px auto 40px auto;
+  margin: 20px auto 20px auto;
   display: flex;
   flex-direction: row;
   gap: 20px;
@@ -850,8 +860,8 @@ body {
   justify-content: center;
   align-items: center;
   background-color: white;
-  width: fit-content;
-  max-width: 90%;
+  width: 80%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.182);
 }
 
 .faculty-tab {
@@ -1307,7 +1317,10 @@ body {
 
 @media (min-width: 768px) {
   .advantage-section {
-    padding: 1rem 0 2rem 0;
+    padding: 1.5rem 0 2rem 0;
+  }
+  .advantage-section .section-title {
+    margin-bottom: 0px;
   }
 }
 
@@ -1333,7 +1346,7 @@ body {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.75rem;
   padding: 0.75rem;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
   width: 100%;
   max-width: 1600px;
   margin-left: auto;
@@ -1351,7 +1364,7 @@ body {
   .advantage-grid {
     grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 1rem;
-    padding: 1.5rem;
+    padding: 0.7rem 1.5rem;
   }
 }
 
@@ -2154,8 +2167,9 @@ body {
 
 @media (min-width: 1024px) {
   .section-title {
+    margin-top: 20px;
     font-size: 2.6rem;
-    padding: 8px 2px;
+
     padding-bottom: 16px;
   }
 }
@@ -2166,6 +2180,12 @@ body {
   background: #FAF8F4;
   display: flex;
   align-items: center;
+}
+
+@media (max-width: 768px) {
+  .experience-life-section {
+    padding: 20px 0px;
+  }
 }
 
 .experience-content {
@@ -2474,7 +2494,6 @@ body {
 /* Student Testimonials Section */
 .student-testimonials-section {
   background: white;
-  padding: 20px 0;
   display: flex;
   align-items: center;
   position: relative;
@@ -2720,7 +2739,7 @@ body {
 
   /* Small Mobile Testimonials */
   .student-testimonials-section {
-    padding: 40px 0;
+    padding: 10px 0;
   }
 
   /* .student-testimonials-section .section-title {
@@ -3108,14 +3127,17 @@ body {
   padding: 0 124px;
 }
 
-/* .foundation-wrapper .section-title {
-  font-size: 44px;
-  padding-bottom: 40px;
-} */
+.foundation-wrapper .section-title {
+  font-size: 30px !important;
+}
 
 @media (max-width: 768px) {
   .foundation-wrapper {
     padding: 0 40px;
+  }
+
+  .foundation-wrapper .section-title {
+    font-size: 30px !important;
   }
 
   /* .foundation-wrapper .section-title {
@@ -3181,7 +3203,7 @@ body {
 .minor-card {
   background: white;
   width: 100%;
-  /* height: -webkit-fill-available; */
+  height: -webkit-fill-available;
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -3237,6 +3259,7 @@ body {
     align-items: flex-start;
     gap: 16px;
     padding: 32px;
+    height: 200px;
     /* position: sticky; */
     top: 80px;
     transition: transform 0.3s ease, opacity 0.3s ease;
@@ -3300,6 +3323,11 @@ body {
   margin: 0 auto;
 }
 
+@media (min-width: 1024px) {
+  .why-choose-content {
+    margin-top: -50px
+  }
+}
 .why-choose-content {
   background: url("https://rishihoodmarketingimg.s3.ap-south-1.amazonaws.com/BBB_Landing/assets/why-bg.webp") center/cover no-repeat;
   /* margin-top: 60px; */
@@ -3564,6 +3592,10 @@ body {
   margin-bottom: auto;
 }
 
+.hero-text-wrapper {
+  width: fit-content;
+}
+
 @media (max-width: 768px) {
   .hero-section {
     margin-top: 0px;
@@ -3584,7 +3616,7 @@ body {
   .hero-content {
     justify-content: flex-start;
     font-size: 1rem !important;
-    padding-top:60px;
+    padding-top: 60px;
   }
 
   .hero-heading {
@@ -3750,7 +3782,7 @@ body {
   .hero-content {
     /* width: 500px; */
     /* padding: 0 80px; */
-    margin-bottom: 0;
+    margin-bottom: 200px;
   }
 
   .hero-heading {
