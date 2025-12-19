@@ -2010,6 +2010,7 @@ body {
 }
 
 .footer-social-link {
+  cursor: pointer;
   width: 2rem;
   height: 2rem;
   background-color: #fff;
@@ -2068,6 +2069,7 @@ body {
 }
 
 .footer-address-link {
+  cursor: pointer;
   font-size: 0.875rem;
   font-weight: 500;
   color: #fff;
@@ -3168,7 +3170,7 @@ body {
 }
 
 .foundation-description {
-  font-size: 22px;
+  font-size: 20px;
   color: #000000;
   padding: 16px 54px;
   font-family: "Montserrat", sans-serif;
@@ -3411,7 +3413,7 @@ body {
 }
 
 .feature-title {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   color: #cc0033;
   margin-bottom: 6px;
@@ -3421,7 +3423,7 @@ body {
 }
 
 .feature-description {
-  font-size: 20px;
+  font-size: 18px;
   color: #000000;
   line-height: 1.6;
   font-weight: 500;
@@ -3572,7 +3574,7 @@ body {
   background-size: cover;
   background-position: top;
   background-repeat: no-repeat;
-  min-height: 110vh;
+  min-height: 102vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

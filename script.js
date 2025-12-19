@@ -1812,3 +1812,77 @@ document.addEventListener("DOMContentLoaded", function () {
       setTimeout(startAutoScroll, 2000);
   });
 });
+
+// Curriculum Tabs Scroll Hint Animation
+document.addEventListener("DOMContentLoaded", function () {
+  const tabsContainer = document.getElementById("curriculum-tabs-container");
+  if (!tabsContainer) return;
+
+  let hintInterval;
+  let userInteracted = false;
+
+  const stopHintLoop = () => {
+    userInteracted = true;
+    if (hintInterval) clearInterval(hintInterval);
+  };
+
+  // Stop animation on user interaction
+  tabsContainer.addEventListener("touchstart", stopHintLoop, { passive: true });
+  tabsContainer.addEventListener("mousedown", stopHintLoop);
+  tabsContainer.addEventListener("wheel", stopHintLoop, { passive: true });
+
+  const runHintAnimation = () => {
+    if (userInteracted) return;
+
+    // Check if scrollable (content width > container width)
+    if (tabsContainer.scrollWidth > tabsContainer.clientWidth) {
+      // Hint animation: Scroll right a bit, then back
+      tabsContainer.scrollTo({
+        left: 60, // Scroll 60px to the right
+        behavior: "smooth",
+      });
+
+      setTimeout(() => {
+        if (userInteracted) return;
+        tabsContainer.scrollTo({
+          left: 0, // Scroll back to start
+          behavior: "smooth",
+        });
+      }, 800); // Wait for the scroll to finish
+    }
+  };
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !userInteracted) {
+          // Start the loop
+          // Run once after a short delay
+          setTimeout(runHintAnimation, 500);
+          
+          // Then repeat every 4.5 seconds
+          hintInterval = setInterval(runHintAnimation, 4500);
+          
+          // Stop observing so we don't restart the loop unnecessarily
+          observer.unobserve(tabsContainer);
+        }
+      });
+    },
+    { threshold: 0.6 } // Trigger when 60% visible
+  );
+
+  observer.observe(tabsContainer);
+});
+
+// Generic Scroll to Top Trigger
+document.addEventListener('click', function(e) {
+  // Check if the clicked element or any of its parents has the class 'scroll-to-top-trigger'
+  const trigger = e.target.closest('.scroll-to-top-trigger');
+  if (trigger) {
+    e.preventDefault(); // Prevent default anchor behavior if it's a link
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+});
